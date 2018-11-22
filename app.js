@@ -1,7 +1,6 @@
+var random = new TimeSeries();
 $(document).ready(function() {
-  var random = new TimeSeries();
-
-  var chart = new SmoothieChart({
+    var chart = new SmoothieChart({
     maxValue:10,
     minValue:-10,
     tooltip:true,
@@ -25,15 +24,25 @@ $(document).ready(function() {
   d = $("#data");
   const dbRef = firebase.database().ref().child("data");
   dbRef.on("child_added", function(snapshot, previousChildKey) {
-    console.log(snapshot.val());
-    d.text(snapshot.val().value);
-
+    // console.log(snapshot.val());
+    
     // var waktu = new Date();
     // random.append(waktu.getTime(), snapshot.val().value);
     // console.log(waktu.toTimeString());
 
-    var waktu = new Date(snapshot.val().date + "T" + snapshot.val().time + "+07:00");
-    random.append(waktu.getTime(), snapshot.val().value);
-    console.log(waktu.toTimeString());
+    // var waktu = new Date(snapshot.val().date + "T" + snapshot.val().time + "+07:00");
+    // random.append(waktu.getTime(), snapshot.val().value);
+    // console.log(waktu.toTimeString());
+
+    var s = snapshot.val();
+    JSON.parse(s).forEach(update);
   });
 });
+
+function update(value)
+{
+    console.log(value);
+    var waktu = new Date(value.date + "T" + value.time + "+07:00");
+    random.append(waktu.getTime(), value.value);
+    console.log(waktu.toTimeString());
+}
